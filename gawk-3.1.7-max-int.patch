@@ -1,0 +1,11 @@
+--- gawk-3.1.7/node.c.orig	2010-05-28 09:38:42.000000000 +0200
++++ gawk-3.1.7/node.c	2010-05-28 09:38:51.000000000 +0200
+@@ -212,7 +212,7 @@ format_val(const char *format, int index
+ 
+ 	/* not an integral value, or out of range */
+ 	if ((val = double_to_int(s->numbr)) != s->numbr
+-	    || val < LONG_MIN || val > LONG_MAX) {
++	    || val <= LONG_MIN || val >= LONG_MAX) {
+ 		/*
+ 		 * Once upon a time, if GFMT_WORKAROUND wasn't defined,
+ 		 * we just blindly did this:

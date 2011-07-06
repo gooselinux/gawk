@@ -1,0 +1,23 @@
+--- gawk-3.1.7/builtin.c.orig	2010-04-01 15:52:45.000000000 +0200
++++ gawk-3.1.7/builtin.c	2010-04-01 15:57:17.000000000 +0200
+@@ -1218,9 +1218,18 @@ check_pos:
+ 			if (fw == 0 && ! have_prec)
+ 				;
+ 			else if (gawk_mb_cur_max > 1 && (cs1 == 's' || cs1 == 'c')) {
++				int nchars_needed = 0;
++
+ 				assert(cp == arg->stptr || cp == cpbuf);
+-				copy_count = mbc_byte_count(arg->stptr,
+-						cs1 == 's' ? arg->stlen : 1);
++
++				if (cs1 == 'c')
++					nchars_needed = 1;
++				else if (have_prec)
++					nchars_needed = prec;
++				else
++					nchars_needed = arg->stlen;
++
++				copy_count = mbc_byte_count(arg->stptr, nchars_needed);
+ 			}
+ 			bchunk(cp, copy_count);
+ 			while (fw > prec) {
